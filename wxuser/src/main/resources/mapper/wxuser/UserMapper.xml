@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wxuser.mapper.UserMapper">
+    
+    <resultMap type="User" id="UserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="userCreateTime"    column="user_create_time"    />
+        <result property="userUpdateTime"    column="user_update_time"    />
+        <result property="openid"    column="openid"    />
+    </resultMap>
+
+    <sql id="selectUserVo">
+        select user_id, nickname, user_create_time, user_update_time, openid from h_user
+    </sql>
+
+    <select id="selectUserList" parameterType="User" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectUserByUserId" parameterType="Long" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+        insert into h_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickname != null">nickname,</if>
+            <if test="userCreateTime != null">user_create_time,</if>
+            <if test="userUpdateTime != null">user_update_time,</if>
+            <if test="openid != null">openid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickname != null">#{nickname},</if>
+            <if test="userCreateTime != null">#{userCreateTime},</if>
+            <if test="userUpdateTime != null">#{userUpdateTime},</if>
+            <if test="openid != null">#{openid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        update h_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="userCreateTime != null">user_create_time = #{userCreateTime},</if>
+            <if test="userUpdateTime != null">user_update_time = #{userUpdateTime},</if>
+            <if test="openid != null">openid = #{openid},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteUserByUserId" parameterType="Long">
+        delete from h_user where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserByUserIds" parameterType="String">
+        delete from h_user where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>

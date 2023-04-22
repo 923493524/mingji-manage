@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.order.mapper.OrderMapper">
+    
+    <resultMap type="Order" id="OrderResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="hotelId"    column="hotel_id"    />
+        <result property="hotelName"    column="hotel_name"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="roomNumber"    column="room_number"    />
+        <result property="orderPrice"    column="order_price"    />
+        <result property="orderPaid"    column="order_paid"    />
+        <result property="orderType"    column="order_type"    />
+        <result property="orderRemarks"    column="order_remarks"    />
+        <result property="orderCreateTime"    column="order_create_time"    />
+        <result property="orderUpdateTime"    column="order_update_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="occupantList"    column="occupant_list"    />
+        <result property="occupantTel"    column="occupant_tel"    />
+        <result property="occupantTime"    column="occupant_time"    />
+    </resultMap>
+
+    <sql id="selectOrderVo">
+        select order_id, user_id, hotel_id, hotel_name, room_id, room_name, room_number, order_price, order_paid, order_type, order_remarks, order_create_time, order_update_time, start_time, end_time, occupant_list, occupant_tel, occupant_time from h_order
+    </sql>
+
+    <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        <where>  
+            <if test="hotelName != null  and hotelName != ''"> and hotel_name like concat('%', #{hotelName}, '%')</if>
+            <if test="orderType != null  and orderType != ''"> and order_type = #{orderType}</if>
+            <if test="occupantList != null  and occupantList != ''"> and occupant_list like concat('%', #{occupantList}, '%')</if>
+            <if test="occupantTel != null  and occupantTel != ''"> and occupant_tel like concat('%', #{occupantTel}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectOrderByOrderId" parameterType="String" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        where order_id = #{orderId}
+    </select>
+        
+    <insert id="insertOrder" parameterType="Order">
+        insert into h_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="hotelId != null">hotel_id,</if>
+            <if test="hotelName != null">hotel_name,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="roomName != null">room_name,</if>
+            <if test="roomNumber != null">room_number,</if>
+            <if test="orderPrice != null">order_price,</if>
+            <if test="orderPaid != null">order_paid,</if>
+            <if test="orderType != null">order_type,</if>
+            <if test="orderRemarks != null">order_remarks,</if>
+            <if test="orderCreateTime != null">order_create_time,</if>
+            <if test="orderUpdateTime != null">order_update_time,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="occupantList != null and occupantList != ''">occupant_list,</if>
+            <if test="occupantTel != null and occupantTel != ''">occupant_tel,</if>
+            <if test="occupantTime != null">occupant_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="hotelId != null">#{hotelId},</if>
+            <if test="hotelName != null">#{hotelName},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="roomName != null">#{roomName},</if>
+            <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="orderPrice != null">#{orderPrice},</if>
+            <if test="orderPaid != null">#{orderPaid},</if>
+            <if test="orderType != null">#{orderType},</if>
+            <if test="orderRemarks != null">#{orderRemarks},</if>
+            <if test="orderCreateTime != null">#{orderCreateTime},</if>
+            <if test="orderUpdateTime != null">#{orderUpdateTime},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="occupantList != null and occupantList != ''">#{occupantList},</if>
+            <if test="occupantTel != null and occupantTel != ''">#{occupantTel},</if>
+            <if test="occupantTime != null">#{occupantTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrder" parameterType="Order">
+        update h_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="hotelId != null">hotel_id = #{hotelId},</if>
+            <if test="hotelName != null">hotel_name = #{hotelName},</if>
+            <if test="roomId != null">room_id = #{roomId},</if>
+            <if test="roomName != null">room_name = #{roomName},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="orderPrice != null">order_price = #{orderPrice},</if>
+            <if test="orderPaid != null">order_paid = #{orderPaid},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="orderRemarks != null">order_remarks = #{orderRemarks},</if>
+            <if test="orderCreateTime != null">order_create_time = #{orderCreateTime},</if>
+            <if test="orderUpdateTime != null">order_update_time = #{orderUpdateTime},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="occupantList != null and occupantList != ''">occupant_list = #{occupantList},</if>
+            <if test="occupantTel != null and occupantTel != ''">occupant_tel = #{occupantTel},</if>
+            <if test="occupantTime != null">occupant_time = #{occupantTime},</if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteOrderByOrderId" parameterType="String">
+        delete from h_order where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteOrderByOrderIds" parameterType="String">
+        delete from h_order where order_id in 
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+</mapper>

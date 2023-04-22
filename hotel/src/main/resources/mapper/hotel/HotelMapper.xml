@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.hotel.mapper.HotelMapper">
+    
+    <resultMap type="Hotel" id="HotelResult">
+        <result property="hotelId"    column="hotel_id"    />
+        <result property="hotelName"    column="hotel_name"    />
+        <result property="hotelAddress"    column="hotel_address"    />
+        <result property="hotelTel"    column="hotel_tel"    />
+        <result property="hotelPerson"    column="hotel_person"    />
+        <result property="hotelCreateTime"    column="hotel_create_time"    />
+        <result property="hotelUpdateTime"    column="hotel_update_time"    />
+        <result property="hotelPic"    column="hotel_pic"    />
+        <result property="hotelSsq"    column="hotel_ssq"    />
+    </resultMap>
+
+    <sql id="selectHotelVo">
+        select hotel_id, hotel_name, hotel_address, hotel_tel, hotel_person, hotel_create_time, hotel_update_time, hotel_pic, hotel_ssq from h_hotel
+    </sql>
+    <sql id="selectHotelName1">
+        select hotel_name from h_hotel
+    </sql>
+
+    <select id="selectHotelList" parameterType="Hotel" resultMap="HotelResult">
+        <include refid="selectHotelVo"/>
+        <where>  
+            <if test="hotelName != null  and hotelName != ''"> and hotel_name like concat('%', #{hotelName}, '%')</if>
+            <if test="hotelAddress != null  and hotelAddress != ''"> and hotel_address like concat('%', #{hotelAddress}, '%')</if>
+            <if test="hotelPerson != null  and hotelPerson != ''"> and hotel_person like concat('%', #{hotelPerson}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectHotelByHotelId" parameterType="Long" resultMap="HotelResult">
+        <include refid="selectHotelVo"/>
+        where hotel_id = #{hotelId}
+    </select>
+    <select id="selectHotelName" resultType="java.lang.String">
+        <include refid="selectHotelName1"></include>
+    </select>
+
+
+    <insert id="insertHotel" parameterType="Hotel" useGeneratedKeys="true" keyProperty="hotelId">
+        insert into h_hotel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hotelName != null and hotelName != ''">hotel_name,</if>
+            <if test="hotelAddress != null and hotelAddress != ''">hotel_address,</if>
+            <if test="hotelTel != null and hotelTel != ''">hotel_tel,</if>
+            <if test="hotelPerson != null and hotelPerson != ''">hotel_person,</if>
+            <if test="hotelCreateTime != null">hotel_create_time,</if>
+            <if test="hotelUpdateTime != null">hotel_update_time,</if>
+            <if test="hotelPic != null and hotelPic != ''">hotel_pic,</if>
+            <if test="hotelSsq != null and hotelSsq != ''">hotel_ssq,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hotelName != null and hotelName != ''">#{hotelName},</if>
+            <if test="hotelAddress != null and hotelAddress != ''">#{hotelAddress},</if>
+            <if test="hotelTel != null and hotelTel != ''">#{hotelTel},</if>
+            <if test="hotelPerson != null and hotelPerson != ''">#{hotelPerson},</if>
+            <if test="hotelCreateTime != null">#{hotelCreateTime},</if>
+            <if test="hotelUpdateTime != null">#{hotelUpdateTime},</if>
+            <if test="hotelPic != null and hotelPic != ''">#{hotelPic},</if>
+            <if test="hotelSsq != null and hotelSsq != ''">#{hotelSsq},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHotel" parameterType="Hotel">
+        update h_hotel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hotelName != null and hotelName != ''">hotel_name = #{hotelName},</if>
+            <if test="hotelAddress != null and hotelAddress != ''">hotel_address = #{hotelAddress},</if>
+            <if test="hotelTel != null and hotelTel != ''">hotel_tel = #{hotelTel},</if>
+            <if test="hotelPerson != null and hotelPerson != ''">hotel_person = #{hotelPerson},</if>
+            <if test="hotelCreateTime != null">hotel_create_time = #{hotelCreateTime},</if>
+            <if test="hotelUpdateTime != null">hotel_update_time = #{hotelUpdateTime},</if>
+            <if test="hotelPic != null and hotelPic != ''">hotel_pic = #{hotelPic},</if>
+            <if test="hotelSsq != null and hotelSsq != ''">hotel_ssq = #{hotelSsq},</if>
+        </trim>
+        where hotel_id = #{hotelId}
+    </update>
+
+    <delete id="deleteHotelByHotelId" parameterType="Long">
+        delete from h_hotel where hotel_id = #{hotelId}
+    </delete>
+
+    <delete id="deleteHotelByHotelIds" parameterType="String">
+        delete from h_hotel where hotel_id in 
+        <foreach item="hotelId" collection="array" open="(" separator="," close=")">
+            #{hotelId}
+        </foreach>
+    </delete>
+</mapper>

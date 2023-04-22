@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.district.mapper.QxbmDistrictMapper">
+    
+    <resultMap type="QxbmDistrict" id="QxbmDistrictResult">
+        <result property="districtId"    column="district_id"    />
+        <result property="districtPid"    column="district_pid"    />
+        <result property="districtName"    column="district_name"    />
+        <result property="districtShortname"    column="district_shortname"    />
+        <result property="districtLngX"    column="district_lng_x"    />
+        <result property="districtLatY"    column="district_lat_y"    />
+        <result property="districtLevel"    column="district_level"    />
+        <result property="districtSort"    column="district_sort"    />
+        <result property="districtStatus"    column="district_status"    />
+    </resultMap>
+
+    <sql id="selectQxbmDistrictVo">
+        select district_id, district_pid, district_name, district_shortname, district_lng_x, district_lat_y, district_level, district_sort, district_status from qxbm_district
+    </sql>
+
+    <select id="selectQxbmDistrictList" parameterType="QxbmDistrict" resultMap="QxbmDistrictResult">
+        <include refid="selectQxbmDistrictVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectQxbmDistrictByDistrictId" parameterType="Long" resultMap="QxbmDistrictResult">
+        <include refid="selectQxbmDistrictVo"/>
+        where district_id = #{districtId}
+    </select>
+        
+    <insert id="insertQxbmDistrict" parameterType="QxbmDistrict">
+        insert into qxbm_district
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="districtId != null">district_id,</if>
+            <if test="districtPid != null">district_pid,</if>
+            <if test="districtName != null">district_name,</if>
+            <if test="districtShortname != null">district_shortname,</if>
+            <if test="districtLngX != null">district_lng_x,</if>
+            <if test="districtLatY != null">district_lat_y,</if>
+            <if test="districtLevel != null">district_level,</if>
+            <if test="districtSort != null">district_sort,</if>
+            <if test="districtStatus != null">district_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="districtId != null">#{districtId},</if>
+            <if test="districtPid != null">#{districtPid},</if>
+            <if test="districtName != null">#{districtName},</if>
+            <if test="districtShortname != null">#{districtShortname},</if>
+            <if test="districtLngX != null">#{districtLngX},</if>
+            <if test="districtLatY != null">#{districtLatY},</if>
+            <if test="districtLevel != null">#{districtLevel},</if>
+            <if test="districtSort != null">#{districtSort},</if>
+            <if test="districtStatus != null">#{districtStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQxbmDistrict" parameterType="QxbmDistrict">
+        update qxbm_district
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="districtPid != null">district_pid = #{districtPid},</if>
+            <if test="districtName != null">district_name = #{districtName},</if>
+            <if test="districtShortname != null">district_shortname = #{districtShortname},</if>
+            <if test="districtLngX != null">district_lng_x = #{districtLngX},</if>
+            <if test="districtLatY != null">district_lat_y = #{districtLatY},</if>
+            <if test="districtLevel != null">district_level = #{districtLevel},</if>
+            <if test="districtSort != null">district_sort = #{districtSort},</if>
+            <if test="districtStatus != null">district_status = #{districtStatus},</if>
+        </trim>
+        where district_id = #{districtId}
+    </update>
+
+    <delete id="deleteQxbmDistrictByDistrictId" parameterType="Long">
+        delete from qxbm_district where district_id = #{districtId}
+    </delete>
+
+    <delete id="deleteQxbmDistrictByDistrictIds" parameterType="String">
+        delete from qxbm_district where district_id in 
+        <foreach item="districtId" collection="array" open="(" separator="," close=")">
+            #{districtId}
+        </foreach>
+    </delete>
+</mapper>

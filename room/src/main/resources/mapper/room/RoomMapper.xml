@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.room.mapper.RoomMapper">
+    
+    <resultMap type="Room" id="RoomResult">
+        <result property="roomId"    column="room_id"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="roomPrice"    column="room_price"    />
+        <result property="roomNumber"    column="room_number"    />
+        <result property="roomRemainNumber"    column="room_remain_number"    />
+        <result property="roomInHotelId"    column="room_in_hotel_id"    />
+        <result property="roomInHotelName"    column="room_in_hotel_name"    />
+        <result property="roomCreateTime"    column="room_create_time"    />
+        <result property="roomUpdateTime"    column="room_update_time"    />
+        <result property="roomProfile"    column="room_profile"    />
+        <result property="roomPic"    column="room_pic"    />
+    </resultMap>
+
+    <sql id="selectRoomVo">
+        select room_id, room_name, room_price, room_number, room_remain_number, room_in_hotel_id, room_in_hotel_name, room_create_time, room_update_time, room_profile, room_pic from h_room
+    </sql>
+
+    <select id="selectRoomList" parameterType="Room" resultMap="RoomResult">
+        <include refid="selectRoomVo"/>
+        <where>  
+            <if test="roomName != null  and roomName != ''"> and room_name like concat('%', #{roomName}, '%')</if>
+            <if test="roomPrice != null "> and room_price like concat('%', #{roomPrice}, '%')</if>
+            <if test="roomNumber != null "> and room_number like concat('%', #{roomNumber}, '%')</if>
+            <if test="roomRemainNumber != null "> and room_remain_number like concat('%', #{roomRemainNumber}, '%')</if>
+            <if test="roomInHotelName != null  and roomInHotelName != ''"> and room_in_hotel_name like concat('%', #{roomInHotelName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectRoomByRoomId" parameterType="Long" resultMap="RoomResult">
+        <include refid="selectRoomVo"/>
+        where room_id = #{roomId}
+    </select>
+        
+    <insert id="insertRoom" parameterType="Room" useGeneratedKeys="true" keyProperty="roomId">
+        insert into h_room
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomName != null and roomName != ''">room_name,</if>
+            <if test="roomPrice != null">room_price,</if>
+            <if test="roomNumber != null">room_number,</if>
+            <if test="roomRemainNumber != null">room_remain_number,</if>
+            <if test="roomInHotelId != null">room_in_hotel_id,</if>
+            <if test="roomInHotelName != null and roomInHotelName != ''">room_in_hotel_name,</if>
+            <if test="roomCreateTime != null">room_create_time,</if>
+            <if test="roomUpdateTime != null">room_update_time,</if>
+            <if test="roomProfile != null and roomProfile != ''">room_profile,</if>
+            <if test="roomPic != null and roomPic != ''">room_pic,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomName != null and roomName != ''">#{roomName},</if>
+            <if test="roomPrice != null">#{roomPrice},</if>
+            <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="roomRemainNumber != null">#{roomNumber},</if>
+            <if test="roomInHotelId != null">#{roomInHotelId},</if>
+            <if test="roomInHotelName != null and roomInHotelName != ''">#{roomInHotelName},</if>
+            <if test="roomCreateTime != null">#{roomCreateTime},</if>
+            <if test="roomUpdateTime != null">#{roomUpdateTime},</if>
+            <if test="roomProfile != null and roomProfile != ''">#{roomProfile},</if>
+            <if test="roomPic != null and roomPic != ''">#{roomPic},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRoom" parameterType="Room">
+        update h_room
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomName != null and roomName != ''">room_name = #{roomName},</if>
+            <if test="roomPrice != null">room_price = #{roomPrice},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="roomRemainNumber != null">room_remain_number = #{roomRemainNumber},</if>
+            <if test="roomInHotelId != null">room_in_hotel_id = #{roomInHotelId},</if>
+            <if test="roomInHotelName != null and roomInHotelName != ''">room_in_hotel_name = #{roomInHotelName},</if>
+            <if test="roomCreateTime != null">room_create_time = #{roomCreateTime},</if>
+            <if test="roomUpdateTime != null">room_update_time = #{roomUpdateTime},</if>
+            <if test="roomProfile != null and roomProfile != ''">room_profile = #{roomProfile},</if>
+            <if test="roomPic != null and roomPic != ''">room_pic = #{roomPic},</if>
+        </trim>
+        where room_id = #{roomId}
+    </update>
+
+    <delete id="deleteRoomByRoomId" parameterType="Long">
+        delete from h_room where room_id = #{roomId}
+    </delete>
+
+    <delete id="deleteRoomByRoomIds" parameterType="String">
+        delete from h_room where room_id in 
+        <foreach item="roomId" collection="array" open="(" separator="," close=")">
+            #{roomId}
+        </foreach>
+    </delete>
+</mapper>
